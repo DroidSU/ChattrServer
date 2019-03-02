@@ -17,7 +17,6 @@ admin.initializeApp({
 })
 
 app.get('/', (req, res) => {
-  console.log('Sending html file')
   res.sendFile(path.join(__dirname, '/index.html'))
 })
 
@@ -25,7 +24,6 @@ app.get('/', (req, res) => {
   This uses an arrow function, new way to define a function.
 */
 http.listen(port || 3000, () => {
-  console.log('Log testing')
   console.log('Server is listening on port ' + port)
 })
 
