@@ -9,6 +9,7 @@
   "author": "Sujoy Datta",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "firebase-admin": "^7.0.0",
     "nodemon": "^1.18.9",

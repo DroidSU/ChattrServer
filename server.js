@@ -1,9 +1,9 @@
 var app = require('express')() // this line gives the variable app a server framework
 var http = require('http').Server(app) // used to connect to the Server
-
 var io = require('socket.io')(http)
-
 var admin = require('firebase-admin')
+
+const { port } = require('./config')
 
 // Get the firebase credentials from the private folder
 var path = require('path')
@@ -23,6 +23,6 @@ accountRegistrationReq.userAccountCreateRequests(io)
 /*
   This uses an arrow function, new way to define a function.
 */
-http.listen(3000, () => {
-  console.log('Server is listening on port 3000')
+http.listen(port, () => {
+  console.log('Server is listening on port ' + port)
 })
