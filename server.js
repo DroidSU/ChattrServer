@@ -20,6 +20,10 @@ admin.initializeApp({
 var accountRegistrationReq = require('./Firebase/account-services')
 accountRegistrationReq.userAccountCreateRequests(io)
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'))
+})
+
 /*
   This uses an arrow function, new way to define a function.
 */
