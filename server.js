@@ -16,17 +16,19 @@ admin.initializeApp({
   databaseURL: 'https://chattr-d500d.firebaseio.com'
 })
 
-// Moved socket code from server.js to account-services.js and called from server.js
-var accountRegistrationReq = require('./Firebase/account-services')
-accountRegistrationReq.userAccountCreateRequests(io)
-
 app.get('/', (req, res) => {
+  console.log('Sending html file')
   res.sendFile(path.join(__dirname, '/index.html'))
 })
 
 /*
   This uses an arrow function, new way to define a function.
 */
-http.listen(port, () => {
+http.listen(port || 3000, () => {
+  console.log('Log testing')
   console.log('Server is listening on port ' + port)
 })
+
+// Moved socket code from server.js to account-services.js and called from server.js
+var accountRegistrationReq = require('./Firebase/account-services')
+accountRegistrationReq.userAccountCreateRequests(io)
