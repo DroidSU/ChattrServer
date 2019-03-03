@@ -17,12 +17,10 @@ var userAccountCreateRequests = (io) => {
 
 function registerUser (socket, io) {
   socket.on('userData', (data) => {
-    console.log('Registering: ' + data.mobNumber)
     admin.auth().createUser({
       email: data.email,
       password: data.password,
-      displayName: data.username,
-      phoneNumber: data.mobNumber
+      displayName: data.username
     })
       .then((userRecord) => {
         console.log(`${data.email} was registered successfully`)
