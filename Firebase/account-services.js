@@ -80,6 +80,7 @@ function logInUser (socket, io) {
                     displayName: snapshot.val().UserName,
                     mobNumber: snapshot.val().MobNumber
                   }
+                  console.log(data.email + ' logged in')
                   io.to(id).emit(FIREBASE_AUTH_TOKEN_GENERATED, token)
                 }
               })
