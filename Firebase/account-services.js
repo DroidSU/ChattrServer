@@ -71,7 +71,6 @@ function logInUser (socket, io) {
             email: data.email
           }
 
-          console.log('Creating custom token')
           admin.auth().createCustomToken(userRecord.uid, additionalClaims)
             .then((customToken) => {
               Object.keys(io.sockets.sockets).forEach((id) => {
@@ -82,7 +81,6 @@ function logInUser (socket, io) {
                     displayName: snapshot.val().UserName,
                     mobNumber: snapshot.val().MobNumber
                   }
-                  console.log('About to emit: ' + token.mobNumber)
                   io.to(id).emit(FIREBASE_AUTH_TOKEN_GENERATED, token)
                 }
               })
