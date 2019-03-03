@@ -20,7 +20,8 @@ function registerUser (socket, io) {
     admin.auth().createUser({
       email: data.email,
       password: data.password,
-      displayName: data.username
+      displayName: data.username,
+      phoneNumber: data.mobNumber
     })
       .then((userRecord) => {
         console.log(`${data.email} was registered successfully`)
@@ -42,7 +43,7 @@ function registerUser (socket, io) {
 
         Object.keys(io.sockets.sockets).forEach((id) => {
           if (id === socket.id) {
-            io.to(id).emit(REGISTRATION_COMPLETE_EVENT,REGISTRATION_SUCCESS_MESSAGE)
+            io.to(id).emit(REGISTRATION_COMPLETE_EVENT, REGISTRATION_SUCCESS_MESSAGE)
           }
         })
       })
@@ -61,7 +62,6 @@ function logInUser (socket, io) {
   socket.on('userInfo', (data) => {
     admin.auth().getUserByEmail(data.email)
       .then((userRecord) => {
-        console.log(userRecord)
         var db = admin.database()
         var ref = db.ref(FIREBASE_USERS_TABLE)
         var userRef = ref.child(userRecord.displayName)
@@ -78,7 +78,8 @@ function logInUser (socket, io) {
                   var token = {
                     authToken: customToken,
                     email: snapshot.val().Email,
-                    displayName: snapshot.val().UserName
+                    displayName: snapshot.val().UserName,
+                    mobNumber: snapshot.val().MobNumber
                   }
                   io.to(id).emit(FIREBASE_AUTH_TOKEN_GENERATED, token)
                 }
@@ -89,7 +90,8 @@ function logInUser (socket, io) {
                   var token = {
                     authToken: error.message,
                     email: 'error',
-                    displayName: 'error'
+                    displayName: 'error',
+                    mobNumber: 'error'
                   }
                   io.to(id).emit(FIREBASE_AUTH_TOKEN_GENERATED, token)
                 }
