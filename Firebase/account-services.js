@@ -61,9 +61,7 @@ function logInUser (socket, io) {
   socket.on('userInfo', (data) => {
     admin.auth().getUserByEmail(data.email)
       .then((userRecord) => {
-        // console.log("Username from userRecord is: "+userRecord.UserName);
-        // console.log(userRecord);
-
+        console.log(userRecord)
         var db = admin.database()
         var ref = db.ref(FIREBASE_USERS_TABLE)
         var userRef = ref.child(userRecord.displayName)
@@ -108,10 +106,6 @@ function logInUser (socket, io) {
 function detectDisconnection (socket, io) {
   socket.on('disconnect', () => {
   })
-}
-
-function encodeEmail (email) {
-  return email.replace('.', ',')
 }
 
 module.exports = {
