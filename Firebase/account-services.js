@@ -7,11 +7,16 @@ let FIREBASE_AUTH_TOKEN_GENERATED = 'FIREBASE_AUTH_TOKEN_GENERATED'
 let FIREBASE_USERS_TABLE = 'Users'
 let FIREBASE_PHONE_NUMBERS_TABLE = 'Phone Numbers'
 
+var db = admin.database()
+var ref = db.ref(FIREBASE_USERS_TABLE)
+
 var userAccountCreateRequests = (io) => {
   io.on('connection', (socket) => {
     registerUser(socket, io)
-    detectDisconnection(socket, io)
+    // detectDisconnection(socket, io)
     logInUser(socket, io)
+    changeStatusOffline(socket, io)
+    changeStatusOnlne(socket, io)
   })
 }
 
@@ -24,9 +29,6 @@ function registerUser (socket, io) {
     })
       .then((userRecord) => {
         console.log(`${data.email} was registered successfully`)
-
-        var db = admin.database()
-        var ref = db.ref(FIREBASE_USERS_TABLE)
         var userRef = ref.child(data.username)
         userRef.set({
           Email: data.email,
@@ -61,8 +63,6 @@ function logInUser (socket, io) {
   socket.on('userInfo', (data) => {
     admin.auth().getUserByEmail(data.email)
       .then((userRecord) => {
-        var db = admin.database()
-        var ref = db.ref(FIREBASE_USERS_TABLE)
         var userRef = ref.child(userRecord.displayName)
 
         userRef.once('value', (snapshot) => {
@@ -106,8 +106,21 @@ function logInUser (socket, io) {
   })
 }
 
-function detectDisconnection (socket, io) {
-  socket.on('disconnect', () => {
+function changeStatusOffline (socket, io) {
+  socket.on('statusOffline', (data) => {
+    var userRef = ref.child(data.displayName)
+    userRef.set({
+      IsOnline: false
+    })
+  })
+}
+
+function changeStatusOnlne (socket, io) {
+  socket.on('statusOnline', (data) => {
+    var userRef = ref.child(data.displayName)
+    userRef.set({
+      IsOnline: true
+    })
   })
 }
 
