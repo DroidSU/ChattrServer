@@ -108,19 +108,15 @@ function logInUser (socket, io) {
 
 function changeStatusOffline (socket, io) {
   socket.on('statusOffline', (data) => {
-    var userRef = ref.child(data.displayName).child('IsOnline')
-    userRef.set({
-      IsOnline: false
-    })
+    var onlineStatusRef = ref.child(data.displayName).child('IsOnline')
+    onlineStatusRef.set(false)
   })
 }
 
 function changeStatusOnlne (socket, io) {
   socket.on('statusOnline', (data) => {
-    var userRef = ref.child(data.displayName).child('IsOnline')
-    userRef.set({
-      IsOnline: true
-    })
+    var onlineStatusRef = ref.child(data.displayName).child('IsOnline')
+    onlineStatusRef.set(true)
   })
 }
 
