@@ -39,7 +39,8 @@ function registerUser (socket, io) {
 
         var userStatusRef = db.ref(FIREBASE_PHONE_NUMBERS_TABLE).child(data.mobNumber)
         userStatusRef.set({
-          Email: data.email
+          Email: data.email,
+          Username: data.username
         })
 
         Object.keys(io.sockets.sockets).forEach((id) => {
