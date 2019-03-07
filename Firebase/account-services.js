@@ -4,13 +4,11 @@ let REGISTRATION_FAILED_MESSAGE = 'REGISTRATION_FAILED'
 let REGISTRATION_SUCCESS_MESSAGE = 'REGISTRATION_SUCCESS'
 let REGISTRATION_COMPLETE_EVENT = 'REGISTRATION_COMPLETE'
 let FIREBASE_AUTH_TOKEN_GENERATED = 'FIREBASE_AUTH_TOKEN_GENERATED'
-let FRIEND_CREATED = 'FRIEND_CREATED'
 let FIREBASE_USERS_TABLE = 'Users'
 let FIREBASE_PHONE_NUMBERS_TABLE = 'Phone Numbers'
 
 var db = admin.database()
 var ref = db.ref(FIREBASE_USERS_TABLE)
-var phoneRef = db.ref(FIREBASE_PHONE_NUMBERS_TABLE)
 
 var userAccountCreateRequests = (io) => {
   io.on('connection', (socket) => {
@@ -19,7 +17,6 @@ var userAccountCreateRequests = (io) => {
     logInUser(socket, io)
     changeStatusOffline(socket, io)
     changeStatusOnlne(socket, io)
-    getFriendDetails(socket, io)
   })
 }
 
@@ -121,24 +118,6 @@ function changeStatusOnlne (socket, io) {
   socket.on('statusOnline', (data) => {
     var onlineStatusRef = ref.child(data.displayName).child('IsOnline')
     onlineStatusRef.set(true)
-  })
-}
-
-function getFriendDetails (socket, io) {
-  socket.on('sendFriendDetails', (data) => {
-    var userRef = phoneRef.child(data.friendNumber)
-
-    userRef.once('value', (snapshot) => {
-      Object.keys(io.sockets.sockets).forEach((id) => {
-        if (id === socket.id) {
-          var friendObject = {
-            friendUsername: snapshot.val().Username,
-            friendMobNumber: data.friendNumber
-          }
-          io.to(id).emit(FRIEND_CREATED, friendObject)
-        }
-      })
-    })
   })
 }
 

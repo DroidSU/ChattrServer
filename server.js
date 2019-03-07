@@ -30,3 +30,6 @@ http.listen(port || 3000, () => {
 // Moved socket code from server.js to account-services.js and called from server.js
 var accountRegistrationReq = require('./Firebase/account-services')
 accountRegistrationReq.userAccountCreateRequests(io)
+
+var chatFunctionsRequests = require('./chat-functions.js')
+chatFunctionsRequests.chatFunctions(io)
