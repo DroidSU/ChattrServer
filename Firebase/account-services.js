@@ -126,7 +126,6 @@ function changeStatusOnlne (socket, io) {
 
 function getFriendDetails (socket, io) {
   socket.on('sendFriendDetails', (data) => {
-    console.log('Req details received: ' + data)
     var userRef = phoneRef.child(data.friendNumber)
 
     userRef.once('value', (snapshot) => {
@@ -136,7 +135,6 @@ function getFriendDetails (socket, io) {
             friendUsername: snapshot.val().Username,
             friendMobNumber: data.friendNumber
           }
-          console.log('emitting' + friendObject)
           io.to(id).emit(FRIEND_CREATED, friendObject)
         }
       })
