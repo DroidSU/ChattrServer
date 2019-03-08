@@ -157,6 +157,7 @@ function sendUserChatToFirebase (socket, io) {
       receiver_username: data.receiver_username,
       date: data.date
     })
+    console.log('Chat message created in firebase')
   })
 }
 
