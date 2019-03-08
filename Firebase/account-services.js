@@ -149,6 +149,7 @@ function getFriendDetails (socket, io) {
 // EXPORT THE FOLLOWING CODES TO ANOTHER FILE
 function sendUserChatToFirebase (socket, io) {
   socket.on(SEND_CHAT_MESSAGE_EVENT, (data) => {
+    console.log('executing sending chat message')
     var userChatRef = chatsRef.child(data.chattrBoxId).child(data.chatId)
     userChatRef.set({
       chatId: data.chatId,
