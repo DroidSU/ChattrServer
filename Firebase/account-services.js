@@ -9,11 +9,13 @@ let FIREBASE_USERS_TABLE = 'Users'
 let FIREBASE_PHONE_NUMBERS_TABLE = 'Phone Numbers'
 let SEND_CHAT_MESSAGE_EVENT = 'SEND_CHAT_MESSAGE_EVENT'
 let FIREBASE_CHATS_TABLE = 'Chats'
+let FIREBASE_NEW_CHATS_TABLE = 'NewMessageIds'
 
 var db = admin.database()
 var ref = db.ref(FIREBASE_USERS_TABLE)
 var phoneRef = db.ref(FIREBASE_PHONE_NUMBERS_TABLE)
 var chatsRef = db.ref(FIREBASE_CHATS_TABLE)
+var newChatsRef = db.ref(FIREBASE_NEW_CHATS_TABLE)
 
 var userAccountCreateRequests = (io) => {
   io.on('connection', (socket) => {
@@ -149,7 +151,11 @@ function getFriendDetails (socket, io) {
 // EXPORT THE FOLLOWING CODES TO ANOTHER FILE
 function sendUserChatToFirebase (socket, io) {
   socket.on(SEND_CHAT_MESSAGE_EVENT, (data) => {
-    console.log('executing sending chat message')
+    var userNewChatRef = newChatsRef.child(data.chattrBoxId)
+    userNewChatRef.set({
+      NewMessageId: data.chatId
+    })
+
     var userChatRef = chatsRef.child(data.chattrBoxId).child(data.chatId)
     userChatRef.set({
       chatId: data.chatId,
@@ -158,7 +164,6 @@ function sendUserChatToFirebase (socket, io) {
       receiver_username: data.receiver_username,
       date: data.date
     })
-    console.log('Chat message created in firebase')
   })
 }
 
