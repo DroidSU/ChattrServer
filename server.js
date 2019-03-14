@@ -32,5 +32,5 @@ var accountRegistrationReq = require('./Firebase/account-services')
 accountRegistrationReq.userAccountCreateRequests(io)
 
 //  Moved chat services code from server.js to chat-services.js and called
-var chatServicesReq = require('./Firebase/chat-servics')
+var chatServicesReq = require('./Firebase/chat-services')
 chatServicesReq.chatServicesRequests(io)
