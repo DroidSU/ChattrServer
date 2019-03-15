@@ -35,12 +35,16 @@ function notifyNewMessage (socket, io) {
         receiver_username: data.receiver_username,
         date: data.date
       }).then(() => {
+        var eventName = data.chattrBoxId
         Object.keys(io.sockets.sockets).forEach((id) => {
           if (id === socket.id) {
-            io.to(id).emit(NEW_MESSAGE_RECEIVED, data)
+            io.to(id).emit(eventName, data)
           }
         })
       })
+        .catch((error) => {
+          console.log(error.message)
+        })
     })
   })
 }
