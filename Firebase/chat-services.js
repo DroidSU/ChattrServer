@@ -3,7 +3,7 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var admin = require('firebase-admin')
 var FCM = require('fcm-push')
-var firebase_functions = require('firebase-funcitons')
+var firebase_functions = require('firebase-functions')
 
 let SEND_CHAT_MESSAGE_EVENT = 'SEND_CHAT_MESSAGE_EVENT'
 let NEW_MESSAGE_RECEIVED = 'NEW_MESSAGE_RECEIVED'
