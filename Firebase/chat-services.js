@@ -34,15 +34,14 @@ function notifyNewMessage (socket, io) {
         sender_username: data.sender_username,
         receiver_username: data.receiver_username,
         date: data.date
-      }).then(() => {
-        console.log('sending event')
-        var eventName = data.chattrBoxId
-        io.emit(eventName, data)
       })
-        .catch((error) => {
-          console.log(error.message)
-        })
     })
+      .then(() => {
+        socket.broadcast.emit(data.chattrBoxId, data)
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
   })
 }
 
