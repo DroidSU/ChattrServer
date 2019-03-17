@@ -40,7 +40,7 @@ function notifyNewMessage (socket, io) {
       })
     })
       .then(() => {
-        var tokenRef = usersRef.child(data.receiver_username).child('InstanceID')
+        var tokenRef = usersRef.child(data.receiver_username).child('InstanceId')
         tokenRef.once('value', (snapshot) => {
           console.log(snapshot.val())
           var message = {
