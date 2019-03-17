@@ -51,20 +51,20 @@ function notifyNewMessage (socket, io) {
               receiver: data.receiver_username
             }
           }
-          // fcm.send(message)
-          //   .then((response) => {
-          //     console.log('Message sent')
-          //   })
-          //   .catch((err) => {
-          //     console.log(err)
-          //   })
-          fcm.send(message, function (err, response) {
-            if (err) {
-              console.log(err)
-            } else {
+          fcm.send(message)
+            .then((response) => {
               console.log('Message sent')
-            }
-          })
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+          // fcm.send(message, function (err, response) {
+          //   if (err) {
+          //     console.log(err)
+          //   } else {
+          //     console.log('Message sent')
+          //   }
+          // })
         })
       })
       .catch((err) => {
