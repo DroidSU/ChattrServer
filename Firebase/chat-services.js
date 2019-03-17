@@ -9,9 +9,12 @@ let SEND_CHAT_MESSAGE_EVENT = 'SEND_CHAT_MESSAGE_EVENT'
 let NEW_MESSAGE_RECEIVED = 'NEW_MESSAGE_RECEIVED'
 let FIREBASE_CHATS_TABLE = 'Chats'
 let FIREBASE_NEW_CHATS_TABLE = 'NewMessageIds'
+let FIREBASE_USERS_TABLE = 'Users'
 
 var serverKey = 'AAAAsaS7MwQ:APA91bHtqDmOBfWmk9vk_6EzTEccqkz7Jn4Q6TiIw6XZjIL7wM5aVs3W6qBW2a0M0_W5V84rUep49j96BYsEOo9Z6re5DbJEiqls1uNZeco9-iuRn5ryF-Za_D4kULtGFaA4Nrpu3GAU'
+var fcm = new FCM(serverKey)
 var db = admin.database()
+var usersRef = db.ref(FIREBASE_USERS_TABLE)
 var chatsRef = db.ref(FIREBASE_CHATS_TABLE)
 var newChatsRef = db.ref(FIREBASE_NEW_CHATS_TABLE)
 
@@ -37,7 +40,26 @@ function notifyNewMessage (socket, io) {
       })
     })
       .then(() => {
-        socket.broadcast.emit(data.chattrBoxId, data)
+        var tokenRef = usersRef.child(data.receiver_username).child('InstanceID')
+        tokenRef.once('value', (snapshot) => {
+          var message = {
+            to: snapshot.val(),
+            data: {
+              title: 'Chattr',
+              body: `New chat received from ${data.sender_username}`,
+              sender: data.sender_username,
+              receiver: data.receiver_username
+            }
+          }
+
+          fcm.send(message)
+            .then((response) => {
+              console.log('Message sent')
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        })
       })
       .catch((error) => {
         console.log(error.message)

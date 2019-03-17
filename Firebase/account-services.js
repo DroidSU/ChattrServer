@@ -11,6 +11,7 @@ let FIREBASE_PHONE_NUMBERS_TABLE = 'Phone Numbers'
 var db = admin.database()
 var ref = db.ref(FIREBASE_USERS_TABLE)
 var phoneRef = db.ref(FIREBASE_PHONE_NUMBERS_TABLE)
+var userDbRef = db.ref(FIREBASE_USERS_TABLE)
 
 var userAccountCreateRequests = (io) => {
   io.on('connection', (socket) => {
@@ -127,13 +128,27 @@ function changeStatusOnlne (socket, io) {
 function getFriendDetails (socket, io) {
   socket.on('sendFriendDetails', (data) => {
     var userRef = phoneRef.child(data.friendNumber)
-
     userRef.once('value', (snapshot) => {
       Object.keys(io.sockets.sockets).forEach((id) => {
         if (id === socket.id) {
           var friendObject = {
             friendUsername: snapshot.val().Username,
             friendMobNumber: data.friendNumber
+          }
+          io.to(id).emit(FRIEND_CREATED, friendObject)
+        }
+      })
+    })
+  })
+
+  socket.on('sendFriendDetailsForUsername', (data) => {
+    var userRef = userDbRef.child(data.friendUsername)
+    userRef.once('value', (snapshot) => {
+      Object.keys(io.sockets.sockets).forEach((id) => {
+        if (id === socket.id) {
+          var friendObject = {
+            friendUsername: snapshot.val().UserName,
+            friendMobNumber: snapshot.val().MobNumber
           }
           io.to(id).emit(FRIEND_CREATED, friendObject)
         }
