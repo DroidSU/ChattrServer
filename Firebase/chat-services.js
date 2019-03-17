@@ -6,7 +6,6 @@ var FCM = require('fcm-push')
 var firebase_functions = require('firebase-functions')
 
 let SEND_CHAT_MESSAGE_EVENT = 'SEND_CHAT_MESSAGE_EVENT'
-let NEW_MESSAGE_RECEIVED = 'NEW_MESSAGE_RECEIVED'
 let FIREBASE_CHATS_TABLE = 'Chats'
 let FIREBASE_NEW_CHATS_TABLE = 'NewMessageIds'
 let FIREBASE_USERS_TABLE = 'Users'
@@ -16,7 +15,6 @@ var fcm = new FCM(serverKey)
 var db = admin.database()
 var usersRef = db.ref(FIREBASE_USERS_TABLE)
 var chatsRef = db.ref(FIREBASE_CHATS_TABLE)
-var newChatsRef = db.ref(FIREBASE_NEW_CHATS_TABLE)
 
 var chatServicesRequests = (io) => {
   io.on('connection', (socket) => {
@@ -26,18 +24,13 @@ var chatServicesRequests = (io) => {
 
 function notifyNewMessage (socket, io) {
   socket.on(SEND_CHAT_MESSAGE_EVENT, (data) => {
-    var userNewChatRef = newChatsRef.child(data.chattrBoxId)
-    userNewChatRef.set({
-      NewMessageId: data.chatId
-    }).then(() => {
-      var userChatRef = chatsRef.child(data.chattrBoxId).child(data.chatId)
-      userChatRef.set({
-        chatId: data.chatId,
-        message: data.chatBody,
-        sender_username: data.sender_username,
-        receiver_username: data.receiver_username,
-        date: data.date
-      })
+    var userChatRef = chatsRef.child(data.chattrBoxId).child(data.chatId)
+    userChatRef.set({
+      chatId: data.chatId,
+      message: data.chatBody,
+      sender_username: data.sender_username,
+      receiver_username: data.receiver_username,
+      date: data.date
     })
       .then(() => {
         var tokenRef = usersRef.child(data.receiver_username).child('InstanceId')
