@@ -42,7 +42,6 @@ function notifyNewMessage (socket, io) {
       .then(() => {
         var tokenRef = usersRef.child(data.receiver_username).child('InstanceId')
         tokenRef.once('value', (snapshot) => {
-          console.log(snapshot.val())
           var message = {
             to: snapshot.val(),
             data: {
@@ -52,9 +51,6 @@ function notifyNewMessage (socket, io) {
               receiver: data.receiver_username
             }
           }
-
-          console.log('About to send message')
-          console.log(`${data.sender_username} this is the sender`)
           // fcm.send(message)
           //   .then((response) => {
           //     console.log('Message sent')
