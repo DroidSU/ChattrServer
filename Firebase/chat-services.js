@@ -48,7 +48,11 @@ function notifyNewMessage (socket, io) {
               title: 'Chattr',
               body: `New chat received from ${data.sender_username}`,
               sender: data.sender_username,
-              receiver: data.receiver_username
+              receiver: data.receiver_username,
+              message: data.chatBody,
+              chatId: data.chatId,
+              chattrBoxId: data.chattrBoxId,
+              date: data.date
             }
           }
           fcm.send(message)
@@ -58,14 +62,6 @@ function notifyNewMessage (socket, io) {
             .catch((err) => {
               console.log(err)
             })
-          // fcm.send(message, function (err, response) {
-          //   if (err) {
-          //     console.log(err)
-          //   } else {
-          //     console.log('Message sent')
-          //   }
-          // })
-        })
       })
       .catch((err) => {
         console.log(err)
