@@ -33,7 +33,6 @@ function notifyNewMessage (socket, io) {
       time: data.time
     })
       .then(() => {
-        console.log(data.timeStamp)
         var tokenRef = usersRef.child(data.receiver_username).child('InstanceId')
         tokenRef.once('value', (snapshot) => {
           var message = {
