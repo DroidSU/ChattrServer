@@ -30,7 +30,7 @@ function notifyNewMessage (socket, io) {
       message: data.chatBody,
       sender_username: data.sender_username,
       receiver_username: data.receiver_username,
-      date: data.date
+      time: data.time
     })
       .then(() => {
         var tokenRef = usersRef.child(data.receiver_username).child('InstanceId')
@@ -45,7 +45,8 @@ function notifyNewMessage (socket, io) {
               message: data.chatBody,
               chatId: data.chatId,
               chattrBoxId: data.chattrBoxId,
-              date: data.date
+              time: data.time,
+              timeStamp: data.timeStamp
             }
           }
           fcm.send(message)
