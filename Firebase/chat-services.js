@@ -51,7 +51,6 @@ function notifyNewMessage (socket, io) {
           }
           fcm.send(message)
             .then((response) => {
-              console.log('Message sent')
             })
             .catch((err) => {
               console.log(err)
