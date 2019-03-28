@@ -4,7 +4,6 @@ let REGISTRATION_FAILED_MESSAGE = 'REGISTRATION_FAILED'
 let REGISTRATION_SUCCESS_MESSAGE = 'REGISTRATION_SUCCESS'
 let REGISTRATION_COMPLETE_EVENT = 'REGISTRATION_COMPLETE'
 let FIREBASE_AUTH_TOKEN_GENERATED = 'FIREBASE_AUTH_TOKEN_GENERATED'
-let USERNAME_EXISTS = USERNAME_EXISTS
 let FRIEND_CREATED = 'FRIEND_CREATED'
 let FIREBASE_USERS_TABLE = 'Users'
 let FIREBASE_PHONE_NUMBERS_TABLE = 'Phone Numbers'
@@ -167,7 +166,7 @@ function getFriendDetails (socket, io) {
   })
 }
 
-function checkIfUsernameExists(data) {
+function checkIfUsernameExists (data) {
   var userRef = ref.child(data.username)
   userRef.once('value', (snapshot) => {
     if (snapshot) {
