@@ -26,50 +26,41 @@ var userAccountCreateRequests = (io) => {
 
 function registerUser (socket, io) {
   socket.on('userData', (data) => {
-    if (!checkIfUsernameExists(data)) {
-      Object.keys(io.sockets.sockets).forEach((id) => {
-        if (id === socket.id) {
-          io.to(id).emit(REGISTRATION_COMPLETE_EVENT, REGISTRATION_FAILED_MESSAGE)
-          console.log('Username already exists')
-        }
-      })
-    } else {
-      admin.auth().createUser({
-        email: data.email,
-        password: data.password,
-        displayName: data.username
-      })
-        .then((userRecord) => {
-          console.log(`${data.email} was registered successfully`)
-          var userRef = ref.child(data.username)
-          userRef.set({
-            Email: data.email,
-            UserName: data.username,
-            MobNumber: data.mobNumber,
-            IsOnline: false
-          })
-
-          var userPhoneRef = db.ref(FIREBASE_PHONE_NUMBERS_TABLE).child(data.mobNumber)
-          userPhoneRef.set({
-            Email: data.email,
-            Username: data.username
-          })
-
-          Object.keys(io.sockets.sockets).forEach((id) => {
-            if (id === socket.id) {
-              io.to(id).emit(REGISTRATION_COMPLETE_EVENT, REGISTRATION_SUCCESS_MESSAGE)
-            }
-          })
+    admin.auth().createUser({
+      email: data.email,
+      password: data.password,
+      displayName: data.username
+    })
+      .then((userRecord) => {
+        console.log(`${data.email} was registered successfully`)
+        var userRef = ref.child(data.username)
+        userRef.set({
+          Email: data.email,
+          UserName: data.username,
+          MobNumber: data.mobNumber,
+          IsOnline: false
         })
-        .catch((error) => {
-          Object.keys(io.sockets.sockets).forEach((id) => {
-            if (id === socket.id) {
-              io.to(id).emit(REGISTRATION_COMPLETE_EVENT, REGISTRATION_FAILED_MESSAGE)
-              console.log(error.message)
-            }
-          })
+
+        var userPhoneRef = db.ref(FIREBASE_PHONE_NUMBERS_TABLE).child(data.mobNumber)
+        userPhoneRef.set({
+          Email: data.email,
+          Username: data.username
         })
-    }
+
+        Object.keys(io.sockets.sockets).forEach((id) => {
+          if (id === socket.id) {
+            io.to(id).emit(REGISTRATION_COMPLETE_EVENT, REGISTRATION_SUCCESS_MESSAGE)
+          }
+        })
+      })
+      .catch((error) => {
+        Object.keys(io.sockets.sockets).forEach((id) => {
+          if (id === socket.id) {
+            io.to(id).emit(REGISTRATION_COMPLETE_EVENT, REGISTRATION_FAILED_MESSAGE)
+            console.log(error.message)
+          }
+        })
+      })
   })
 }
 
@@ -166,17 +157,17 @@ function getFriendDetails (socket, io) {
   })
 }
 
-function checkIfUsernameExists (data) {
-  var userRef = ref.child(data.username)
-  userRef.once('value', (snapshot) => {
-    if (snapshot) {
-      return true
-    } else {
-      return false
-    }
-  }
-  )
-}
+// function checkIfUsernameExists (data) {
+//   var userRef = ref.child(data.username)
+//   userRef.once('value', (snapshot) => {
+//     if (snapshot) {
+//       return true
+//     } else {
+//       return false
+//     }
+//   }
+//   )
+// }
 
 module.exports = {
   userAccountCreateRequests
