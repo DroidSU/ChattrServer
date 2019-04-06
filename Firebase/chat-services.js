@@ -49,7 +49,7 @@ function notifyNewMessage (socket, io) {
             notification: {
               title: 'Chattr',
               body: `${data.sender_username} sends`,
-              click_action: 'ChatActivity'
+              click_action: 'com.morningstar.chattr.activities.ChatActivity'
             }
           }
           fcm.send(message)
