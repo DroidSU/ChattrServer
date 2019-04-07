@@ -39,7 +39,7 @@ function notifyNewMessage (socket, io) {
             to: snapshot.val(),
             data: {
               title: 'Chattr',
-              body: `${data.sender_username} sends`,
+              body: `New message from `,
               sender: data.sender_username,
               receiver: data.receiver_username,
               message: data.chatBody,
