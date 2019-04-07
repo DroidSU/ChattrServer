@@ -38,6 +38,8 @@ function notifyNewMessage (socket, io) {
           var message = {
             to: snapshot.val(),
             data: {
+              title: 'Chattr',
+              body: `${data.sender_username} sends`,
               sender: data.sender_username,
               receiver: data.receiver_username,
               message: data.chatBody,
@@ -45,11 +47,6 @@ function notifyNewMessage (socket, io) {
               chattrBoxId: data.chattrBoxId,
               time: data.time,
               timeStamp: data.timeStamp
-            },
-            notification: {
-              title: 'Chattr',
-              body: `${data.sender_username} sends`,
-              click_action: 'com.morningstar.chattr.activities.ChatActivity'
             }
           }
           fcm.send(message)
